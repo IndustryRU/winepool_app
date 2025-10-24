@@ -39,7 +39,6 @@ _Wine _$WineFromJson(Map<String, dynamic> json) => _Wine(
 Map<String, dynamic> _$WineToJson(_Wine instance) => <String, dynamic>{
   'id': ?instance.id,
   'winery_id': instance.wineryId,
-  'wineries': instance.winery,
   'name': instance.name,
   'description': instance.description,
   'grape_variety': instance.grapeVariety,

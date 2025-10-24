@@ -4,6 +4,7 @@ part 'profile.freezed.dart';
 part 'profile.g.dart';
 
 enum UserRole {
+  admin('admin'),
   buyer('buyer'),
   seller('seller');
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -24,10 +26,15 @@ import 'package:winepool_app/features/wines/presentation/add_edit_wine_screen.da
 import 'package:winepool_app/features/orders/presentation/checkout_screen.dart';
 import 'package:winepool_app/features/orders/presentation/my_orders_screen.dart';
 
+// Создаем ключ над провайдером
+final _shellNavigatorKey = GlobalKey<NavigatorState>();
+
 final goRouterProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authControllerProvider);
+
   return GoRouter(
-    initialLocation: '/login',
     debugLogDiagnostics: true,
+    initialLocation: '/login',
     routes: [
       GoRoute(
         path: '/login',
@@ -46,6 +53,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const SellerHomeScreen(),
       ),
       ShellRoute(
+        navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
           return child;
         },
@@ -157,12 +165,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MyOrdersScreen(),
       ),
     ],
-    redirect: (BuildContext context, GoRouterState state) {
-      final authState = ref.read(authControllerProvider);
+    redirect: (context, state) {
       final isLoggedIn = authState.asData?.value != null;
+      final isLoggingIn = state.uri.toString() == '/login';
       
-      if (state.uri.path != '/login' && !isLoggedIn) {
-        return '/login';
+      if (authState is AsyncLoading) return null;
+
+      if (!isLoggedIn && !isLoggingIn) return '/login';
+      
+      if (isLoggedIn && isLoggingIn) {
+         final role = authState.asData!.value!.role;
+         switch (role) {
+           case 'administrator': return '/admin-home';
+           case 'seller': return '/seller-home';
+           case 'buyer': return '/buyer-home';
+           default: return '/buyer-home'; // Редирект на витрину по умолчанию
+         }
       }
       return null;
     },

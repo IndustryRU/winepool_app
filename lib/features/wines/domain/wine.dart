@@ -54,7 +54,7 @@ abstract class Wine with _$Wine {
   const factory Wine({
     @JsonKey(includeIfNull: false) String? id,
     @JsonKey(name: 'winery_id') required String wineryId,
-    @JsonKey(name: 'wineries')
+    @JsonKey(name: 'wineries', includeToJson: false)
     Winery? winery,
     required String name,
     String? description,

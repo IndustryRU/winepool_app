@@ -19,6 +19,11 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
-    return MaterialApp.router(routerConfig: router, title: 'WinePool App', theme: ThemeData(primarySwatch: Colors.red, useMaterial3: true,));
+    return MaterialApp.router(routerConfig: router,
+      title: 'WinePool App',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        useMaterial3: true,
+      ),);
   }
 }

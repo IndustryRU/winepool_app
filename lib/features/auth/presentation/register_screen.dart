@@ -81,7 +81,7 @@ class RegisterScreen extends HookConsumerWidget {
                   : () async {
                       await ref
                           .read(authControllerProvider.notifier)
-                          .signUp(email: emailController.text, password: passwordController.text, role: selectedRole.value.value);
+                          .signUp(emailController.text, passwordController.text, selectedRole.value.value.toString());
                       
                       if (!context.mounted) return;
                       
