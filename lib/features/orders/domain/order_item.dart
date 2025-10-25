@@ -14,6 +14,7 @@ abstract class OrderItem with _$OrderItem {
     int? quantity,
     @JsonKey(name: 'price_at_purchase') double? priceAtPurchase,
     // Поле для вложенного `Offer`
+    @JsonKey(name: 'offers') // <-- ДОБАВЬ ЭТУ АННОТАЦИЮ
     Offer? offer,
   }) = _OrderItem;
   factory OrderItem.fromJson(Map<String, dynamic> json) {

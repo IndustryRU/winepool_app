@@ -18,22 +18,19 @@ class OrdersRepository {
   OrdersRepository(this._client);
   
   Future<List<Order>> fetchMySales(String sellerId) async {
-    // В идеале, здесь должен быть запрос, который фильтрует по sellerId
-    // через order_items -> offers.
-    // Пока для простоты загрузим все и отфильтруем на клиенте.
-    final response = await _client
-        .from('orders')
-        .select('*, order_items(*, offers(*, wines(*)))');
-    
-    final orders = response.map((json) => Order.fromJson(json)).toList();
-    
-    // Фильтруем на клиенте
-    orders.retainWhere((order) =>
-      order.items != null &&
-      order.items!.any((item) => item.offer?.sellerId == sellerId)
+    final response = await _client.rpc(
+      'get_seller_sales',
+      params: {'p_seller_id': sellerId},
     );
-    
-    return orders;
+
+    // RPC возвращает json, который может быть null, если продаж нет
+    if (response == null) {
+      return [];
+    }
+
+    // Преобразуем json в список заказов
+    final List<dynamic> ordersJson = response as List<dynamic>;
+    return ordersJson.map((json) => Order.fromJson(json as Map<String, dynamic>)).toList();
   }
 
   Future<List<Order>> fetchMyOrders(String userId) async {
