@@ -101,47 +101,52 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
               final offer = products[index];
               return ListTile(
                 title: Text(offer.wine?.name ?? 'Название не найдено'),
-                subtitle: Text('Цена: ${offer.price}'),
+                subtitle: offer.isActive
+                    ? Text('Цена: ${offer.price}')
+                    : Text('Цена: ${offer.price} (в архиве)', style: TextStyle(color: Colors.grey)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        context.push('/edit-offer/${offer.id}', extra: offer);
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      color: Colors.red,
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Подтверждение'),
-                            content: const Text('Вы уверены, что хотите удалить это предложение?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => context.pop(),
-                                child: const Text('Отмена'),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final ref = ProviderScope.containerOf(context);
-                                  await ref.read(offersControllerProvider.notifier).deleteOffer(offer.id);
-                                  ref.invalidate(offersControllerProvider);
-                                  // ignore: use_build_context_synchronously
-                                  if (context.mounted) context.pop(); // Закрыть диалог
-                                },
-                                child: const Text('Удалить'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    if (offer.isActive)
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          context.push('/edit-offer/${offer.id}', extra: offer);
+                        },
+                      ),
+                    if (offer.isActive)
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        color: Colors.red,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Подтверждение'),
+                              content: const Text('Вы уверены, что хотите удалить это предложение?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => context.pop(),
+                                  child: const Text('Отмена'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    final ref = ProviderScope.containerOf(context);
+                                    await ref.read(offersControllerProvider.notifier).deleteOffer(offer.id);
+                                    ref.invalidate(offersControllerProvider);
+                                    // ignore: use_build_context_synchronously
+                                    if (context.mounted) context.pop(); // Закрыть диалог
+                                  },
+                                  child: const Text('Удалить'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                   ],
                 ),
+                tileColor: offer.isActive ? null : Colors.grey.shade100,
               );
             },
           ),

@@ -19,6 +19,7 @@ class OffersRepository {
     final response = await _supabaseClient
         .from('offers')
         .select('*, wines(*, wineries(*)), profiles(id, username, full_name, shop_name)')
+        .eq('is_active', true)
         .order('created_at', ascending: false);
 
     return response.map((json) => Offer.fromJson(json)).toList();
@@ -51,8 +52,8 @@ class OffersRepository {
   Future<void> deleteOffer(String offerId) async {
     await _supabaseClient
         .from('offers')
-        .delete()
-        .eq('id', offerId);
+        .update({'is_active': false})
+        .match({'id': offerId});
   }
 
   Future<Offer> fetchOffer(String offerId) async {

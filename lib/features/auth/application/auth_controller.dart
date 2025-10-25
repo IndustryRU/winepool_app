@@ -20,8 +20,19 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> signIn(String email, String password) async {
-    await ref.read(supabaseClientProvider).auth.signInWithPassword(email: email, password: password);
-    ref.invalidateSelf(); // Принудительно перезагружаем
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(supabaseClientProvider).auth.signInWithPassword(
+            email: email,
+            password: password,
+          );
+    });
+
+    // Если ошибок не было, принудительно инвалидируем себя,
+    // чтобы GoRouter отреагировал
+    if (!state.hasError) {
+      ref.invalidateSelf();
+    }
   }
 
   Future<void> signUp(String email, String password, String username) async {

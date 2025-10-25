@@ -20,7 +20,7 @@ final class OffersControllerProvider
         argument: null,
         retry: null,
         name: r'offersControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class OffersControllerProvider
   OffersController create() => OffersController();
 }
 
-String _$offersControllerHash() => r'373f8363aeb154c9051a5e20f9d17be642b0c112';
+String _$offersControllerHash() => r'1f8e52499d11614e2eff8994fa4ceb3f308507b3';
 
 abstract class _$OffersController extends $AsyncNotifier<List<Offer>> {
   FutureOr<List<Offer>> build();

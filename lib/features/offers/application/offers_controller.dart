@@ -5,10 +5,11 @@ import 'package:winepool_app/features/offers/domain/offer.dart';
 
 part 'offers_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class OffersController extends _$OffersController {
   @override
   Future<List<Offer>> build() async {
+    print('--- Rebuilding OffersController ---');
     return await ref.watch(offersRepositoryProvider).fetchMyOffers();
   }
 

@@ -17,6 +17,7 @@ abstract class Offer with _$Offer {
     int? vintage,
     double? bottleSize,
     @JsonKey(name: 'created_at') DateTime? createdAt,
+    @Default(true) bool isActive,
     @JsonKey(name: 'wines', includeToJson: false) Wine? wine,
     @JsonKey(name: 'profiles', includeToJson: false)
     Profile? seller,

@@ -191,7 +191,7 @@ final class WineMutationProvider
   }
 }
 
-String _$wineMutationHash() => r'45a98cd199ea7e8d78dc912964110263c906e817';
+String _$wineMutationHash() => r'8438b4c0293abd9efa399fb58873d9d2182a419a';
 
 abstract class _$WineMutation extends $Notifier<AsyncValue<void>> {
   AsyncValue<void> build();

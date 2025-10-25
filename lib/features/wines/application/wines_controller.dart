@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:winepool_app/features/offers/application/offers_controller.dart';
 import 'package:winepool_app/features/wines/data/wines_repository.dart';
 import 'package:winepool_app/features/wines/domain/wine.dart';
 
@@ -41,6 +42,7 @@ class WineMutation extends _$WineMutation {
       await ref.read(winesRepositoryProvider).addWine(wine);
       // Инвалидируем список вин для конкретной винодельни
       ref.invalidate(winesByWineryProvider(wine.wineryId));
+      ref.invalidate(offersControllerProvider);
     });
   }
 
@@ -49,6 +51,7 @@ class WineMutation extends _$WineMutation {
     state = await AsyncValue.guard(() async {
       await ref.read(winesRepositoryProvider).updateWine(wine);
       ref.invalidate(winesByWineryProvider(wine.wineryId));
+      ref.invalidate(offersControllerProvider);
     });
   }
 

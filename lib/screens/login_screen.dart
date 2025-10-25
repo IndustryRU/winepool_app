@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:winepool_app/features/auth/application/auth_controller.dart';
+import 'package:winepool_app/features/auth/domain/profile.dart';
 
 // Импорт для перехода на главный экран
 
@@ -18,28 +19,28 @@ class LoginScreen extends HookConsumerWidget {
     final passwordVisible = useState(false);
     final authState = ref.watch(authControllerProvider);
     
-    void handleLogin() async {
-      final authNotifier = ref.read(authControllerProvider.notifier);
-      await authNotifier.signIn(emailController.text, passwordController.text);
-    }
-
-    Widget buildErrorText(Object? error) {
-      String errorMessage = 'Произошла ошибка';
-      
-      if (error is AuthApiException) {
-        errorMessage = 'Неверный логин или пароль';
-      } else if (error != null) {
-        errorMessage = error.toString();
+    ref.listen<AsyncValue<Profile?>>(authControllerProvider, (previous, next) {
+      if (next is AsyncError) {
+        String errorMessage = 'Произошла неизвестная ошибка.';
+        final error = next.error;
+        if (error is AuthApiException) {
+          if (error.message == 'Invalid login credentials') {
+            errorMessage = 'Неверный Email или пароль.';
+          } else if (error.message == 'missing email or phone') {
+            errorMessage = 'Не заполнен Email.';
+          } else {
+            errorMessage = error.message; // Оставляем оригинальное сообщение для других ошибок
+          }
+        } else if (error.toString().contains('SocketException')) {
+          errorMessage = 'Нет подключения к интернету.';
+        }
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
       }
-      
-      return SelectableText.rich(
-        TextSpan(
-          text: errorMessage,
-          style: const TextStyle(color: Colors.red),
-        ),
-      );
-    }
-
+    });
+    
     return Scaffold(
       appBar: AppBar(title: const Text('Вход для продавца')),
       body: Center(
@@ -79,14 +80,41 @@ class LoginScreen extends HookConsumerWidget {
                 textCapitalization: TextCapitalization.none,
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.done,
-                onEditingComplete: handleLogin,
+                onEditingComplete: () async {
+                  try {
+                    await ref.read(authControllerProvider.notifier).signIn(
+                          emailController.text,
+                          passwordController.text,
+                        );
+                  } catch (e) {
+                    if (!context.mounted) return;
+
+                    String errorMessage = 'Произошла неизвестная ошибка.';
+                    if (e is AuthApiException) {
+                      if (e.toString().contains('missing')) {
+                        errorMessage = 'Нет подключения к интернету.';
+                      } else {
+                        errorMessage = e.message;
+                      }                
+                    } else if (e.toString().contains('SocketException')) {
+                      errorMessage = 'Нет подключения к интернету.';
+                    }
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(errorMessage)),
+                    );
+                  }
+                },
               ),
               const SizedBox(height: 16),
-              if (authState.hasError)
-                buildErrorText(authState.error),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: authState.isLoading ? null : handleLogin,
+                onPressed: authState.isLoading ? null : () {
+                  ref.read(authControllerProvider.notifier).signIn(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                },
                 child: authState.isLoading
                     ? const CircularProgressIndicator()
                     : const Text('Войти'),
@@ -104,5 +132,5 @@ class LoginScreen extends HookConsumerWidget {
         ),
       ),
     );
-  }
+ }
 }
