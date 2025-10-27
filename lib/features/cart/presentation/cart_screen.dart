@@ -52,7 +52,28 @@ class CartScreen extends ConsumerWidget {
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
-                              // ... (showDialog)
+                              print('--- Deleting item: ${item.id} ---');
+                              showDialog(
+                                context: context,
+                                builder: (dialogContext) => AlertDialog(
+                                  title: const Text('Удалить товар'),
+                                  content: const Text('Вы уверены, что хотите удалить этот товар из корзины?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(dialogContext).pop(),
+                                      child: const Text('Отмена'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        print('--- Confirming delete for item: ${item.id} ---');
+                                        ref.read(cartControllerProvider.notifier).removeItem(item.id);
+                                        Navigator.of(dialogContext).pop();
+                                      },
+                                      child: const Text('Удалить', style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              );
                             },
                           ),
                         ],
