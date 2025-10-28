@@ -48,18 +48,27 @@ class OrdersRepository {
     required double total,
     required String address,
   }) async {
-    await _client.rpc('create_order_from_cart', params: {
-      'p_user_id': userId,
-      'p_total': total,
-      'p_address': address,
-      'p_items': items
-          .map((item) => {
-                'offer_id': item.offer!.id,
-                'quantity': item.quantity ?? 0,
-                'price': item.offer!.price ?? 0,
-              })
-          .toList(),
-    });
+    print('--- REPO: Placing order for user $userId with ${items.length} items ---');
+    print('--- REPO: Total price: $total, Address: $address ---');
+    try {
+      await _client.rpc('create_order_from_cart', params: {
+        'p_user_id': userId,
+        'p_total': total,
+        'p_address': address,
+        'p_items': items
+            .map((item) => {
+                  'offer_id': item.offer!.id,
+                  'quantity': item.quantity ?? 0,
+                  'price': item.offer!.price ?? 0,
+                  'seller_id': item.offer!.sellerId, // Добавляем seller_id
+                })
+            .toList(),
+      });
+      print('--- REPO: Order placed successfully ---');
+    } catch (e) {
+      print('--- REPO: Error placing order: $e ---');
+      rethrow; // Перебрасываем ошибку, чтобы она была обработана выше
+    }
   }
 }
 
