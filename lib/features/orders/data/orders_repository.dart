@@ -70,6 +70,13 @@ class OrdersRepository {
       rethrow; // Перебрасываем ошибку, чтобы она была обработана выше
     }
   }
+
+  Future<void> updateOrderStatus(String orderId, OrderStatus newStatus) async {
+    await _client
+        .from('orders')
+        .update({'status': newStatus.name}) // name - для отправки в Supabase
+        .eq('id', orderId);
+  }
 }
 
 @riverpod

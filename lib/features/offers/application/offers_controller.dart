@@ -28,6 +28,12 @@ class OffersController extends _$OffersController {
   }
 }
 
+@Riverpod(keepAlive: true)
+Future<List<Offer>> myOffersController(Ref ref) async {
+  print('--- Rebuilding MyOffersController ---');
+  return await ref.watch(offersRepositoryProvider).fetchMyOffers();
+}
+
 class OffersMutationNotifier extends AsyncNotifier<void> {
   @override
   FutureOr<void> build() {}

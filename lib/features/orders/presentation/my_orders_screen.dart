@@ -18,12 +18,15 @@ class MyOrdersScreen extends ConsumerWidget {
           if (orders.isEmpty) {
             return const Center(child: Text('У вас еще нет заказов.'));
           }
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return OrderCard(order: order);
-            },
+          return RefreshIndicator(
+            onRefresh: () => ref.refresh(myOrdersProvider.future),
+            child: ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderCard(order: order);
+              },
+            ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -48,7 +51,7 @@ class OrderCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         title: Text('Заказ от $formattedDate'),
-        subtitle: Text('Статус: ${order.status}'),
+        subtitle: Text('Статус: ${order.statusRu}'),
         trailing: Text('${order.totalPrice ?? 0} ₽'),
         onTap: () {
           // TODO: Навигация на детали заказа

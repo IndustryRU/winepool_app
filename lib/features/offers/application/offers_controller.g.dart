@@ -53,3 +53,43 @@ abstract class _$OffersController extends $AsyncNotifier<List<Offer>> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(myOffersController)
+const myOffersControllerProvider = MyOffersControllerProvider._();
+
+final class MyOffersControllerProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Offer>>,
+          List<Offer>,
+          FutureOr<List<Offer>>
+        >
+    with $FutureModifier<List<Offer>>, $FutureProvider<List<Offer>> {
+  const MyOffersControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'myOffersControllerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$myOffersControllerHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Offer>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Offer>> create(Ref ref) {
+    return myOffersController(ref);
+  }
+}
+
+String _$myOffersControllerHash() =>
+    r'c566aa45cf406f2fc42f345613e1ee39844489f2';

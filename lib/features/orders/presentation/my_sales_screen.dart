@@ -5,7 +5,7 @@ import 'package:winepool_app/features/orders/application/orders_controller.dart'
 import 'package:winepool_app/features/orders/domain/order.dart';
 
 class MySalesScreen extends ConsumerWidget {
-  const MySalesScreen({super.key});
+ const MySalesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,12 +16,18 @@ class MySalesScreen extends ConsumerWidget {
         if (orders.isEmpty) {
           return const Center(child: Text('У вас пока нет продаж.'));
         }
-        return ListView.builder(
-          itemCount: orders.length,
-          itemBuilder: (context, index) {
-            final order = orders[index];
-            return OrderCard(order: order); // Используем тот же OrderCard
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(mySalesProvider);
+            await ref.refresh(mySalesProvider.future);
           },
+          child: ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return OrderCard(order: order); // Используем тот же OrderCard
+            },
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -31,13 +37,13 @@ class MySalesScreen extends ConsumerWidget {
 }
 
 // Этот виджет можно будет вынести в общий файл, если он еще не там
-class OrderCard extends StatelessWidget {
+class OrderCard extends ConsumerWidget {
   const OrderCard({super.key, required this.order});
 
   final Order order;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final formattedDate = order.createdAt != null
         ? DateFormat('dd.MM.yyyy HH:mm').format(order.createdAt!)
         : 'Дата неизвестна';
@@ -46,8 +52,23 @@ class OrderCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         title: Text('Заказ от $formattedDate'),
-        subtitle: Text('Статус: ${order.status}'),
-        trailing: Text('${order.totalPrice} ₽'), // Используем totalPrice
+        subtitle: Text('Статус: ${order.status != null ? OrderStatus.values.firstWhere((e) => e.name == order.status).toRu() : 'Неизвестен'}'),
+        trailing: order.status != null ? DropdownButton<String>(
+          value: order.status,
+          onChanged: (newStatus) async {
+            if (newStatus != null && newStatus != order.status) {
+              // Вызов метода для обновления статуса
+              await ref.read(mySalesControllerProvider.notifier).updateOrderStatus(order.id, OrderStatus.values.firstWhere((e) => e.name == newStatus));
+              ref.invalidate(mySalesProvider);
+            }
+          },
+          items: OrderStatus.values.map((status) {
+            return DropdownMenuItem(
+              value: status.name,
+              child: Text(status.toRu()),
+            );
+          }).toList(),
+        ) : null,
         onTap: () {
           // TODO: Навигация на детали заказа
         },

@@ -17,3 +17,44 @@ abstract class Order with _$Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
 }
+
+extension OrderStatusDisplayExtension on Order {
+  String get statusRu {
+    final statusString = status?.toLowerCase();
+    switch (statusString) {
+      case 'pending':
+        return 'В обработке';
+      case 'confirmed':
+        return 'Подтверждён';
+      case 'inprogress':
+      case 'in_progress':
+        return 'В работе';
+      case 'shipped':
+        return 'Передан в доставку';
+      case 'delivered':
+        return 'Завершен';
+      case 'cancelled':
+        return 'Отменен';
+      default:
+        return status ?? 'Неизвестен';
+    }
+  }
+}
+enum OrderStatus { pending, inProgress, shipped, delivered, cancelled }
+
+extension OrderStatusExtension on OrderStatus {
+  String toRu() {
+    switch (this) {
+      case OrderStatus.pending:
+        return 'В обработке';
+      case OrderStatus.inProgress:
+        return 'В работе';
+      case OrderStatus.shipped:
+        return 'Передан в доставку';
+      case OrderStatus.delivered:
+        return 'Завершен';
+      case OrderStatus.cancelled:
+        return 'Отменен';
+    }
+  }
+}

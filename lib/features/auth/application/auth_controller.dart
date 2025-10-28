@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:winepool_app/core/providers.dart';
 import 'package:winepool_app/features/auth/domain/profile.dart';
+import 'package:winepool_app/features/offers/application/offers_controller.dart';
+import 'package:winepool_app/features/orders/application/orders_controller.dart';
 
 part 'auth_controller.g.dart';
 
@@ -32,6 +34,7 @@ class AuthController extends _$AuthController {
     // чтобы GoRouter отреагировал
     if (!state.hasError) {
       ref.invalidateSelf();
+      ref.invalidate(offersControllerProvider);
     }
   }
 

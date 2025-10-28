@@ -52,3 +52,34 @@ Future<List<Order>> myOrders(Ref ref) {
   final userId = ref.watch(authControllerProvider).value!.id;
   return ref.watch(ordersRepositoryProvider).fetchMyOrders(userId);
 }
+
+// Создаем провайдер вручную
+final mySalesControllerProvider =
+    AsyncNotifierProvider<MySalesController, List<Order>>(
+  MySalesController.new,
+);
+
+// Создаем отдельный контроллер для управления продажами
+class MySalesController extends AsyncNotifier<List<Order>> {
+  @override
+  Future<List<Order>> build() async {
+    final authState = await ref.watch(authControllerProvider.future);
+    final sellerId = authState?.id;
+    if (sellerId == null) return [];
+    return ref.read(ordersRepositoryProvider).fetchMySales(sellerId);
+  }
+
+  Future<void> updateOrderStatus(String orderId, OrderStatus newStatus) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await ref.read(ordersRepositoryProvider).updateOrderStatus(orderId, newStatus);
+      // Обновить список продаж напрямую
+      return fetchMySales();
+    });
+  }
+
+  Future<List<Order>> fetchMySales() async {
+    final sellerId = ref.read(authControllerProvider).value!.id;
+    return ref.read(ordersRepositoryProvider).fetchMySales(sellerId);
+  }
+}

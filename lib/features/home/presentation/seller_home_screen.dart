@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:winepool_app/features/auth/application/auth_controller.dart';
 import 'package:winepool_app/features/orders/presentation/my_sales_screen.dart';
 import 'package:winepool_app/features/offers/application/offers_controller.dart';
-import 'package:winepool_app/features/offers/domain/offer.dart';
 
 class SellerHomeScreen extends StatefulWidget {
   const SellerHomeScreen({super.key});
