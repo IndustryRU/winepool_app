@@ -27,6 +27,11 @@ class BuyerHomeScreen extends ConsumerWidget {
             onPressed: () => context.push('/cart'),
           ),
           IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () => context.push('/profile'),
+            tooltip: 'Профиль',
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
               ref.read(authControllerProvider.notifier).signOut();
