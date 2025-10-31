@@ -12,18 +12,33 @@ part 'orders_controller.g.dart';
 Future<Order?> order(Ref ref, String orderId) async {
   final authState = ref.watch(authControllerProvider);
   final userId = authState.value?.id;
-  
+  final profile = authState.value; // <-- Profile пользователя
+final role = profile?.role; // <-- Роль пользователя
+
   if (userId == null) {
     throw Exception('Пользователь не авторизован');
   }
 
   final ordersRepository = ref.watch(ordersRepositoryProvider);
+
+  // Если пользователь продавец, ищем заказ в продажах
+  if (role == 'seller') {
+    final sales = await ordersRepository.fetchMySales(userId);
+    final saleOrder = sales.firstWhere((order) => order.id == orderId, orElse: () => Order(id: orderId));
+    if (saleOrder.id == orderId) {
+      return saleOrder;
+    }
+  }
+
+  // Если пользователь покупатель или заказ не найден у продавца, ищем в заказах покупателя
   final orders = await ordersRepository.fetchMyOrders(userId);
-  
-  // Находим заказ по ID
   final order = orders.firstWhere((order) => order.id == orderId, orElse: () => Order(id: orderId));
-  
-  return order;
+  if (order.id == orderId) {
+    return order;
+  }
+
+  // Если заказ не найден
+  return null;
 }
 
 // Создаем провайдер вручную

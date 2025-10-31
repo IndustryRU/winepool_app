@@ -1,4 +1,4 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+                                      import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:winepool_app/features/offers/data/offers_repository.dart';
 import 'package:winepool_app/features/offers/domain/offer.dart';
