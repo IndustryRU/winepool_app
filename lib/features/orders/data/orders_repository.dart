@@ -18,28 +18,12 @@ class OrdersRepository {
   OrdersRepository(this._client);
   
   Future<List<Order>> fetchMySales(String sellerId) async {
-    final response = await _client.rpc(
-      'get_seller_sales',
-      params: {'p_seller_id': sellerId},
-    );
-
-    // RPC возвращает json, который может быть null, если продаж нет
-    if (response == null) {
-      return [];
-    }
-
-    // Преобразуем json в список заказов
-    final List<dynamic> ordersJson = response as List<dynamic>;
-
-    // Логгирование
-    print('--- fetchMySales response: $response ---');
-    print('--- ordersJson: $ordersJson ---');
-
-    return ordersJson.map((json) {
-      print('--- json: $json ---');
-      print('--- items: ${(json as Map<String, dynamic>)['items']} ---');
-      return Order.fromJson(json as Map<String, dynamic>);
-    }).toList();
+    final response = await _client
+        .from('orders')
+        .select('*, order_items(*, offers(*, wines(*)))')
+        .eq('seller_id', sellerId)
+        .order('created_at', ascending: false);
+    return response.map(Order.fromJson).toList();
   }
 
   Future<List<Order>> fetchMyOrders(String userId) async {
