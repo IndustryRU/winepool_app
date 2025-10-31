@@ -12,9 +12,7 @@ _OrderItem _$OrderItemFromJson(Map<String, dynamic> json) => _OrderItem(
   offerId: json['offer_id'] as String?,
   quantity: (json['quantity'] as num?)?.toInt(),
   priceAtPurchase: (json['price_at_purchase'] as num?)?.toDouble(),
-  offer: json['offers'] == null
-      ? null
-      : Offer.fromJson(json['offers'] as Map<String, dynamic>),
+  offer: _offerFromJson(json['offers']),
 );
 
 Map<String, dynamic> _$OrderItemToJson(_OrderItem instance) =>

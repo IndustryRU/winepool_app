@@ -37,6 +37,7 @@ class OrdersRepository {
 
     return ordersJson.map((json) {
       print('--- json: $json ---');
+      print('--- items: ${(json as Map<String, dynamic>)['items']} ---');
       return Order.fromJson(json as Map<String, dynamic>);
     }).toList();
   }
@@ -47,6 +48,7 @@ class OrdersRepository {
         .select('*, order_items(*, offers(*, wines(*)))')
         .eq('user_id', userId)
         .order('created_at', ascending: false);
+    print('--- fetchMyOrders response: $response ---');
     return response.map(Order.fromJson).toList();
   }
 

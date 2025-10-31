@@ -19,7 +19,7 @@ abstract class Order with _$Order {
     @JsonKey(name: 'total_price') double? totalPrice,
     String? status,
     @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'items', fromJson: _orderItemsFromJson, includeToJson: false) List<OrderItem>? items,
+    @JsonKey(name: 'order_items', fromJson: _orderItemsFromJson, includeToJson: false) List<OrderItem>? items,
   }) = _Order;
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 mixin _$OrderItem {
 
  String get id;@JsonKey(defaultValue: '') String? get orderId;@JsonKey(name: 'offer_id') String? get offerId; int? get quantity;@JsonKey(name: 'price_at_purchase') double? get priceAtPurchase;// Поле для вложенного `Offer`
-@JsonKey(name: 'offers') Offer? get offer;
+@JsonKey(name: 'offers', fromJson: _offerFromJson) Offer? get offer;
 /// Create a copy of OrderItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -46,7 +46,7 @@ abstract mixin class $OrderItemCopyWith<$Res>  {
   factory $OrderItemCopyWith(OrderItem value, $Res Function(OrderItem) _then) = _$OrderItemCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(defaultValue: '') String? orderId,@JsonKey(name: 'offer_id') String? offerId, int? quantity,@JsonKey(name: 'price_at_purchase') double? priceAtPurchase,@JsonKey(name: 'offers') Offer? offer
+ String id,@JsonKey(defaultValue: '') String? orderId,@JsonKey(name: 'offer_id') String? offerId, int? quantity,@JsonKey(name: 'price_at_purchase') double? priceAtPurchase,@JsonKey(name: 'offers', fromJson: _offerFromJson) Offer? offer
 });
 
 
@@ -168,7 +168,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(defaultValue: '')  String? orderId, @JsonKey(name: 'offer_id')  String? offerId,  int? quantity, @JsonKey(name: 'price_at_purchase')  double? priceAtPurchase, @JsonKey(name: 'offers')  Offer? offer)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(defaultValue: '')  String? orderId, @JsonKey(name: 'offer_id')  String? offerId,  int? quantity, @JsonKey(name: 'price_at_purchase')  double? priceAtPurchase, @JsonKey(name: 'offers', fromJson: _offerFromJson)  Offer? offer)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderItem() when $default != null:
 return $default(_that.id,_that.orderId,_that.offerId,_that.quantity,_that.priceAtPurchase,_that.offer);case _:
@@ -189,7 +189,7 @@ return $default(_that.id,_that.orderId,_that.offerId,_that.quantity,_that.priceA
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(defaultValue: '')  String? orderId, @JsonKey(name: 'offer_id')  String? offerId,  int? quantity, @JsonKey(name: 'price_at_purchase')  double? priceAtPurchase, @JsonKey(name: 'offers')  Offer? offer)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(defaultValue: '')  String? orderId, @JsonKey(name: 'offer_id')  String? offerId,  int? quantity, @JsonKey(name: 'price_at_purchase')  double? priceAtPurchase, @JsonKey(name: 'offers', fromJson: _offerFromJson)  Offer? offer)  $default,) {final _that = this;
 switch (_that) {
 case _OrderItem():
 return $default(_that.id,_that.orderId,_that.offerId,_that.quantity,_that.priceAtPurchase,_that.offer);case _:
@@ -209,7 +209,7 @@ return $default(_that.id,_that.orderId,_that.offerId,_that.quantity,_that.priceA
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(defaultValue: '')  String? orderId, @JsonKey(name: 'offer_id')  String? offerId,  int? quantity, @JsonKey(name: 'price_at_purchase')  double? priceAtPurchase, @JsonKey(name: 'offers')  Offer? offer)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(defaultValue: '')  String? orderId, @JsonKey(name: 'offer_id')  String? offerId,  int? quantity, @JsonKey(name: 'price_at_purchase')  double? priceAtPurchase, @JsonKey(name: 'offers', fromJson: _offerFromJson)  Offer? offer)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderItem() when $default != null:
 return $default(_that.id,_that.orderId,_that.offerId,_that.quantity,_that.priceAtPurchase,_that.offer);case _:
@@ -224,7 +224,7 @@ return $default(_that.id,_that.orderId,_that.offerId,_that.quantity,_that.priceA
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _OrderItem implements OrderItem {
-  const _OrderItem({required this.id, @JsonKey(defaultValue: '') this.orderId, @JsonKey(name: 'offer_id') this.offerId, this.quantity, @JsonKey(name: 'price_at_purchase') this.priceAtPurchase, @JsonKey(name: 'offers') this.offer});
+  const _OrderItem({required this.id, @JsonKey(defaultValue: '') this.orderId, @JsonKey(name: 'offer_id') this.offerId, this.quantity, @JsonKey(name: 'price_at_purchase') this.priceAtPurchase, @JsonKey(name: 'offers', fromJson: _offerFromJson) this.offer});
   
 
 @override final  String id;
@@ -233,7 +233,7 @@ class _OrderItem implements OrderItem {
 @override final  int? quantity;
 @override@JsonKey(name: 'price_at_purchase') final  double? priceAtPurchase;
 // Поле для вложенного `Offer`
-@override@JsonKey(name: 'offers') final  Offer? offer;
+@override@JsonKey(name: 'offers', fromJson: _offerFromJson) final  Offer? offer;
 
 /// Create a copy of OrderItem
 /// with the given fields replaced by the non-null parameter values.
@@ -265,7 +265,7 @@ abstract mixin class _$OrderItemCopyWith<$Res> implements $OrderItemCopyWith<$Re
   factory _$OrderItemCopyWith(_OrderItem value, $Res Function(_OrderItem) _then) = __$OrderItemCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(defaultValue: '') String? orderId,@JsonKey(name: 'offer_id') String? offerId, int? quantity,@JsonKey(name: 'price_at_purchase') double? priceAtPurchase,@JsonKey(name: 'offers') Offer? offer
+ String id,@JsonKey(defaultValue: '') String? orderId,@JsonKey(name: 'offer_id') String? offerId, int? quantity,@JsonKey(name: 'price_at_purchase') double? priceAtPurchase,@JsonKey(name: 'offers', fromJson: _offerFromJson) Offer? offer
 });
 
 

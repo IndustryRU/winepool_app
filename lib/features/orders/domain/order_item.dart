@@ -4,6 +4,17 @@ import 'package:winepool_app/features/offers/domain/offer.dart';
 part 'order_item.freezed.dart';
 part 'order_item.g.dart';
 
+Offer? _offerFromJson(dynamic json) {
+  if (json is List && json.isNotEmpty) {
+    // Берем первый элемент из массива offers
+    return Offer.fromJson(json[0] as Map<String, dynamic>);
+  } else if (json is Map<String, dynamic>) {
+    // Если это уже одиночный объект, а не массив
+    return Offer.fromJson(json);
+  }
+  return null;
+}
+
 @freezed
 abstract class OrderItem with _$OrderItem {
   @JsonSerializable(fieldRename: FieldRename.snake)
@@ -14,7 +25,7 @@ abstract class OrderItem with _$OrderItem {
     int? quantity,
     @JsonKey(name: 'price_at_purchase') double? priceAtPurchase,
     // Поле для вложенного `Offer`
-    @JsonKey(name: 'offers') // <-- ДОБАВЬ ЭТУ АННОТАЦИЮ
+    @JsonKey(name: 'offers', fromJson: _offerFromJson) // <-- ДОБАВЬ ЭТУ АННОТАЦИЮ
     Offer? offer,
   }) = _OrderItem;
   factory OrderItem.fromJson(Map<String, dynamic> json) {
