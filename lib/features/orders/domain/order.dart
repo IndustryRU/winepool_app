@@ -3,6 +3,13 @@ import 'package:winepool_app/features/orders/domain/order_item.dart';
 
 part 'order.freezed.dart';
 part 'order.g.dart';
+List<OrderItem>? _orderItemsFromJson(dynamic json) {
+  if (json is List) {
+    return json.map((item) => OrderItem.fromJson(item as Map<String, dynamic>)).toList();
+  }
+  return null;
+}
+
 
 @freezed
 abstract class Order with _$Order {
@@ -12,7 +19,7 @@ abstract class Order with _$Order {
     @JsonKey(name: 'total_price') double? totalPrice,
     String? status,
     @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(includeFromJson: false, includeToJson: false) List<OrderItem>? items,
+    @JsonKey(name: 'items', fromJson: _orderItemsFromJson, includeToJson: false) List<OrderItem>? items,
   }) = _Order;
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);

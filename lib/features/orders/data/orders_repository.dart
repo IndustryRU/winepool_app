@@ -30,7 +30,15 @@ class OrdersRepository {
 
     // Преобразуем json в список заказов
     final List<dynamic> ordersJson = response as List<dynamic>;
-    return ordersJson.map((json) => Order.fromJson(json as Map<String, dynamic>)).toList();
+
+    // Логгирование
+    print('--- fetchMySales response: $response ---');
+    print('--- ordersJson: $ordersJson ---');
+
+    return ordersJson.map((json) {
+      print('--- json: $json ---');
+      return Order.fromJson(json as Map<String, dynamic>);
+    }).toList();
   }
 
   Future<List<Order>> fetchMyOrders(String userId) async {

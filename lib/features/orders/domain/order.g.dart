@@ -14,6 +14,7 @@ _Order _$OrderFromJson(Map<String, dynamic> json) => _Order(
   createdAt: json['created_at'] == null
       ? null
       : DateTime.parse(json['created_at'] as String),
+  items: _orderItemsFromJson(json['items']),
 );
 
 Map<String, dynamic> _$OrderToJson(_Order instance) => <String, dynamic>{
