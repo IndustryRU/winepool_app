@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:winepool_app/features/orders/application/orders_controller.dart';
 import 'package:winepool_app/features/orders/domain/order.dart';
+import 'package:winepool_app/features/orders/presentation/order_details_screen.dart';
 
 class MySalesScreen extends ConsumerWidget {
  const MySalesScreen({super.key});
@@ -70,7 +71,11 @@ class OrderCard extends ConsumerWidget {
           }).toList(),
         ) : null,
         onTap: () {
-          // TODO: Навигация на детали заказа
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => OrderDetailsScreen(orderId: order.id),
+            ),
+          );
         },
       ),
     );

@@ -9,6 +9,75 @@ part of 'orders_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(order)
+const orderProvider = OrderFamily._();
+
+final class OrderProvider
+    extends $FunctionalProvider<AsyncValue<Order?>, Order?, FutureOr<Order?>>
+    with $FutureModifier<Order?>, $FutureProvider<Order?> {
+  const OrderProvider._({
+    required OrderFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'orderProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$orderHash();
+
+  @override
+  String toString() {
+    return r'orderProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<Order?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Order?> create(Ref ref) {
+    final argument = this.argument as String;
+    return order(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is OrderProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$orderHash() => r'1e4325fed18ba7773eaa1143efe75603347488af';
+
+final class OrderFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Order?>, String> {
+  const OrderFamily._()
+    : super(
+        retry: null,
+        name: r'orderProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  OrderProvider call(String orderId) =>
+      OrderProvider._(argument: orderId, from: this);
+
+  @override
+  String toString() => r'orderProvider';
+}
+
 @ProviderFor(myOrders)
 const myOrdersProvider = MyOrdersProvider._();
 

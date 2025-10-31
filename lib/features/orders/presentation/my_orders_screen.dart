@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:winepool_app/features/orders/application/orders_controller.dart';
 import 'package:winepool_app/features/orders/domain/order.dart';
+import 'package:winepool_app/features/orders/presentation/order_details_screen.dart';
 
 class MyOrdersScreen extends ConsumerWidget {
   const MyOrdersScreen({super.key});
@@ -54,7 +55,11 @@ class OrderCard extends StatelessWidget {
         subtitle: Text('Статус: ${order.statusRu}'),
         trailing: Text('${order.totalPrice ?? 0} ₽'),
         onTap: () {
-          // TODO: Навигация на детали заказа
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => OrderDetailsScreen(orderId: order.id),
+            ),
+          );
         },
       ),
     );

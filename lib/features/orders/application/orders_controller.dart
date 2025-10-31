@@ -7,6 +7,25 @@ import 'package:winepool_app/features/orders/domain/order.dart';
 
 part 'orders_controller.g.dart';
 
+// Провайдер для получения деталей конкретного заказа
+@riverpod
+Future<Order?> order(Ref ref, String orderId) async {
+  final authState = ref.watch(authControllerProvider);
+  final userId = authState.value?.id;
+  
+  if (userId == null) {
+    throw Exception('Пользователь не авторизован');
+  }
+
+  final ordersRepository = ref.watch(ordersRepositoryProvider);
+  final orders = await ordersRepository.fetchMyOrders(userId);
+  
+  // Находим заказ по ID
+  final order = orders.firstWhere((order) => order.id == orderId, orElse: () => Order(id: orderId));
+  
+  return order;
+}
+
 // Создаем провайдер вручную
 final placeOrderControllerProvider =
     AsyncNotifierProvider<PlaceOrderController, void>(
