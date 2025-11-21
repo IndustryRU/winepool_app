@@ -39,7 +39,7 @@ dependencies:
 
   # State management and routing
   flutter_riverpod: ^3.0.3
-  go_router: ^16.2.4
+  go_router: ^17.0.0
 
   # Code generation
   freezed_annotation: ^3.0.0
