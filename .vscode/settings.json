@@ -1,4 +1,5 @@
 {
     "emulator.emulatorPath": "R:\\Emulate\\Android\\cmdline-tools\\emulator",
-    "dart.flutterSdkPath": "R:\\Flutter\\flutter"
+    "dart.flutterSdkPath": "R:\\Flutter\\flutter",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
