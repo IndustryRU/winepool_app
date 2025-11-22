@@ -12,7 +12,38 @@ import 'package:pigeon/pigeon.dart';
     dartPackageName: 'ebs_plugin',
   ),
 )
+class EbsResultData {
+  EbsResultData({
+    this.isError,
+    this.secret,
+    this.errorString,
+  });
+
+  bool? isError;
+  String? secret;
+  String? errorString;
+}
+
 @HostApi()
 abstract class NativeHostApi {
-  // Здесь будут методы для взаимодействия с нативным кодом
+  @async
+  bool isInstalledApp();
+
+  @async
+  String getAppName();
+
+  @async
+  String getRequestInstallAppText();
+
+  @async
+  bool requestInstallApp();
+
+  @async
+  EbsResultData requestVerification({
+    required String infoSystem,
+    required String adapterUri,
+    required String sid,
+    required String dboKoUri,
+    required String dbkKoPublicUri,
+  });
 }
